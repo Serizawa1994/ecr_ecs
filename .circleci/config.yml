@@ -2,14 +2,19 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.10.0
   #aws-ecs: circleci/aws-ecs@1.2.0
+jobs:
+  push-image:
+    executor: aws-ecr/build-and-push-image
+    resource_class: medium
+
 workflows:
   build-and-deploy:
     jobs:
-      - aws-ecr/build-and-push-image:
+      - push-image:
           account-url: AWS_ECR_ACCOUNT_URL
           repo: 'nginx'
           tag: '${CIRCLE_SHA1}'
-          resource_class: medium
+          
 
       ### ECSへデプロイするジョブ
       #- aws-ecs/deploy-service-update:
