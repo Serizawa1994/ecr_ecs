@@ -1,26 +1,14 @@
 version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@4.0
-  aws-ecr: circleci/aws-ecr@9.0
-  #aws-ecs: circleci/aws-ecs@1.2.0
-
-jobs:
-  build-test-then-push-with-buildx:
-    machine:
-      image: ubuntu-2204:current
-    steps:
-      - aws-ecr/build_and_push_image:
-          auth:
-            - aws-cli/setup:
-                role_arn: ${AWS_ROLE_ARN}
-          region: '${AWS_REGION}'
-          repo: 'nginx'
-          tag: '${CIRCLE_SHA1}'
-
+  aws-ecr: circleci/aws-ecr@7
+  aws-ecs: circleci/aws-ecs@1.2.0
 workflows:
   build-and-deploy:
     jobs:
-      - build-test-then-push-with-buildx
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          repo: 'nginx'
+          tag: '${CIRCLE_SHA1}'
 
       ### ECSへデプロイするジョブ
       #- aws-ecs/deploy-service-update:
