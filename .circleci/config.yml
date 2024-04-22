@@ -9,6 +9,7 @@ workflows:
           account-url: AWS_ECR_ACCOUNT_URL
           repo: 'nginx'
           tag: '${CIRCLE_SHA1}'
+          
 
       ### ECSへデプロイするジョブ
       #- aws-ecs/deploy-service-update:
